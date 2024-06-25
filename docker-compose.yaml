@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - target: 8081
+      - target: ${PORT:-8081}
         published: ${PORT:-8081}
     environment:
       POSTGRES_URI: "postgres://postgres:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DBNAME}?sslmode=disable"
