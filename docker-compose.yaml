@@ -1,0 +1,30 @@
+services:
+  bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - target: 8081
+        published: ${PORT:-8081}
+    environment:
+      POSTGRES_URI: "postgres://postgres:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DBNAME}?sslmode=disable"
+    env_file:
+      - .env
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DBNAME}
+
+volumes:
+  postgres_data:
+    external: false
+networks:
+  internal:
+    attachable: true
+    external: false
